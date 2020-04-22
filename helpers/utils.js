@@ -112,7 +112,17 @@ module.exports = {
                 console.log(`${partFiles.length} stale cached songs deleted.`);
             }
         });
-    }
+    },
+    playEpicSound: (gameSession, guildPreference, message) => {
+        let voiceChannel = message.member.voice.channel;
+    
+        const cacheStreamOptions = {
+            volume: guildPreference.getCachedStreamVolume(),
+            bitrate: voiceChannel.bitrate
+        };
+    
+        gameSession.getConnection().play();
+    };
 }
 
 const playSong = (gameSession, guildPreference, db, message) => {
@@ -161,6 +171,7 @@ const playSong = (gameSession, guildPreference, db, message) => {
         gameSession.dispatcher = connection.play(
             gameSession.isSongCached ? cachedSongLocation : ytdl(gameSession.getVideoID(), ytdlOptions),
             gameSession.isSongCached ? cacheStreamOptions : streamOptions);
+        gameSession.setConnection(connection);
         gameSession.dispatcher.on('finish', () => {
             sendSongMessage(message, gameSession, true);
             gameSession.endRound();

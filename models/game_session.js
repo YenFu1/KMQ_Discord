@@ -8,6 +8,7 @@ module.exports = class GameSession {
         this._link = null;
         this._inSession = false;
         this._skippers = new Set();
+        this._connection = null;
         this.scoreboard = new Scoreboard();
         this.isSongCached = true;
 
@@ -53,5 +54,13 @@ module.exports = class GameSession {
 
     getNumSkippers() {
         return this._skippers.size;
+    }
+
+    getConnection() {
+        return this._connection;
+    }
+
+    setConnection(conn) {
+        this._connection = conn;
     }
 };
